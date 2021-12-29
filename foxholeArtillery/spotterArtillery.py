@@ -1,6 +1,5 @@
 # %%
 import pandas as pd
-import numpy as np
 import math
 from IPython.core.display import display, HTML
 display(HTML("<style>.container { width:100% !important; }</style>"))
@@ -78,31 +77,79 @@ def findAzimuthGunToTarget(spotterToTargetAzimuth, spotterToTargetDistance, spot
 
 # Intuition: find back azimuth of aziSG, then add or subtract aTGS..?
     if (aziSG >= 180) and (aziST < 180) and (aziSG - 180 > aziST):
-        return (aziSG - 180) - aTGS
+        result = (aziSG - 180) - aTGS
+        if result < 0:
+            return (result + 360)
+        elif result >= 360:
+            return (result - 360)
+        else:
+            return result
     
     elif (aziSG >= 180) and (aziST < 180) and (aziSG - 180 < aziST):
-        return (aziSG - 180) + aTGS
+        result = (aziSG - 180) + aTGS
+        if result < 0:
+            return (result + 360)
+        elif result >= 360:
+            return (result - 360)
+        else:
+            return result 
     
     
     elif (aziSG < 180) and (aziST >= 180) and (aziSG + 180 > aziST):
-        return (aziSG + 180) - aTGS
+        result = (aziSG + 180) - aTGS
+        if result < 0:
+            return (result + 360)
+        elif result >= 360:
+            return (result - 360)
+        else:
+            return result 
     
     elif (aziSG < 180) and (aziST >= 180) and (aziSG + 180 < aziST):
-        return (aziSG + 180) + aTGS
+        result = (aziSG + 180) + aTGS
+        if result < 0:
+            return (result + 360)
+        elif result >= 360:
+            return (result - 360)
+        else:
+            return result 
     
     
     elif (aziSG >= 180) and (aziST >= 180) and (aziSG > aziST):
-        return (aziSG - 180) + aTGS
+        result = (aziSG - 180) + aTGS
+        if result < 0:
+            return (result + 360)
+        elif result >= 360:
+            return (result - 360)
+        else:
+            return result 
     
     elif (aziSG >= 180) and (aziST >= 180) and (aziSG < aziST):
-        return (aziSG - 180) - aTGS
+        result = (aziSG - 180) - aTGS
+        if result < 0:
+            return (result + 360)
+        elif result >= 360:
+            return (result - 360)
+        else:
+            return result 
     
     
     elif (aziSG < 180) and (aziST < 180) and (aziSG > aziST):
-        return (aziSG + 180) + aTGS
+        result = (aziSG + 180) + aTGS
+        if result < 0:
+            return (result + 360)
+        elif result >= 360:
+            return (result - 360)
+        else:
+            return result 
         
     elif (aziSG < 180) and (aziST < 180) and (aziSG < aziST):
-        return (aziSG + 180) - aTGS
+        result = (aziSG + 180) - aTGS
+        if result < 0:
+            return (result + 360)
+        elif result >= 360:
+            return (result - 360)
+        else:
+            return result 
     
 # print(findAzimuthGunToTarget(254,65,173,50))
 
@@ -167,7 +214,7 @@ def spotterArtillery(spotterToTargetAzimuth, spotterToTargetDistance, spotterToG
         print(firingHistoryArray.tail(2))
         userInput = input("Enter <S> to stop or <C> to change variables\n").lower() # potentially add another option to change values in dataframe if a mistake was entered
 
-        # saves current data in dataframe to excel file & closes program
+
         if userInput == "s":
             print("Exiting..")
             break
@@ -214,7 +261,8 @@ def spotterArtillery(spotterToTargetAzimuth, spotterToTargetDistance, spotterToG
                     break
 
         gunToTargetNewVals = comprehensiveSpotterArtillery(spotterToTargetAzimuth, spotterToTargetDistance, spotterToGunAzimuth, spotterToGunDistance, windAzimuth, windForce, weaponType)
-
+        gunToTargetNewVals = [round(x, 3) for x in gunToTargetNewVals]
+        
         print(f"\nWind Adjusted Gun To Target Azimuth: {gunToTargetNewVals[2]}")
         print(f"Wind Adjusted Gun To Target Distance: {gunToTargetNewVals[3]} \n")
         print("---------------------------------------------------------------------- \n")
@@ -250,7 +298,7 @@ def noSpotterArtillery(unadjustedGunToTargetAzimuth, unadjustedGunToTargetDistan
         print(firingHistoryArray.tail(2))
         userInput = input("\nEnter <S> to stop or <C> to change variables. \n").lower() # potentially add another option to change values in dataframe if a mistake was entered
 
-        # saves current data in dataframe to excel file & closes program
+
         if userInput == "s":
             print("Exiting..")
             break
@@ -298,6 +346,7 @@ def noSpotterArtillery(unadjustedGunToTargetAzimuth, unadjustedGunToTargetDistan
     
 
         windAdjustedGunToTargetAziDist = findWindAdjustedGunToTargetAziDist(unadjustedGunToTargetAzimuth, unadjustedGunToTargetDistance, windAzimuth, windForce, weaponType)
+        windAdjustedGunToTargetAziDist = [round(x, 3) for x in windAdjustedGunToTargetAziDist]
         print(f"Wind Adjusted Gun To Target Azimuth: {windAdjustedGunToTargetAziDist[2]}")
         print(f"Wind Adjusted Gun To Target Distance: {windAdjustedGunToTargetAziDist[3]} \n")
         print("---------------------------------------------------------------------- \n")
@@ -400,6 +449,9 @@ def multipleGunSpotterArtillery(spotterToTargetAzimuth, spotterToTargetDistance,
             print(f"Wind Adjusted Gun {i+1} To Target Distance: {adjustedGunToTargetAziDist[i][1]} \n")
         print("---------------------------------------------------------------------- \n")
 
+        unadjustedGunToTargetAziDist = [round(x, 3) for x in unadjustedGunToTargetAziDist]
+        adjustedGunToTargetAziDist = [round(x, 3) for x in unadjustedGunToTargetAziDist]
+        
         valuesToStoreInDataframe = [spotterToTargetAzimuth, spotterToTargetDistance, spotterToGunsAziDist, windAzimuth, windForce, unadjustedGunToTargetAziDist, adjustedGunToTargetAziDist]
         firingHistoryArrayLength = len(firingHistoryArray)
         firingHistoryArray.reset_index(drop=True, inplace=True)
@@ -418,6 +470,336 @@ def multipleGunSpotterArtillery(spotterToTargetAzimuth, spotterToTargetDistance,
 
 
 # multipleGunSpotterArtillery(254,65,[173,50,250,50],124,3,3)
+
+
+# %%
+# Experimental functions below
+
+# %%
+def findImpliedWindAdjustedGunToTargetAziDist(unadjustedGunToTargetAzimuth, unadjustedGunToTargetDistance, impliedWindAzimuth, impliedWindDriftMeters):
+    # target takes the spotter role in the triangle calculation
+    # adjustedTarget takes the role of target in the triangle calculation
+    # accounts for wind force 1-3
+    
+    # oppositeWindAzimuth is the back azimuth of impliedWindAzimuth
+    if impliedWindAzimuth < 180:
+        oppositeWindAzimuth = impliedWindAzimuth + 180
+    elif impliedWindAzimuth >= 180:
+        oppositeWindAzimuth = impliedWindAzimuth - 180
+    
+    
+    # spotterToGunAzimuth is unadjustedGunToTarget back azimuth
+    if unadjustedGunToTargetAzimuth < 180:
+        targetToGunAzimuth = unadjustedGunToTargetAzimuth + 180
+    else:
+        targetToGunAzimuth = unadjustedGunToTargetAzimuth - 180
+        
+    adjustedGunToTargetAzimuth = findAzimuthGunToTarget(oppositeWindAzimuth,impliedWindDriftMeters, targetToGunAzimuth, unadjustedGunToTargetDistance)
+    adjustedGunToTargetDist = findDistanceGunToTarget(oppositeWindAzimuth,impliedWindDriftMeters, targetToGunAzimuth, unadjustedGunToTargetDistance)
+    return [unadjustedGunToTargetAzimuth, unadjustedGunToTargetDistance, adjustedGunToTargetAzimuth, adjustedGunToTargetDist]
+
+# print(findImpliedWindAdjustedGunToTargetAziDist(323.2,5,270,4))
+
+# %%
+import pandas as pd
+
+# ouputs [impliedWindAzimuth, impliedWindDriftMeters]
+def findImpliedWindAziDist(gunToImpactAzi, gunToImpactDist, gunToTargetAzi, gunToTargetDist):
+    impliedWindAzimuth = findAzimuthGunToTarget(gunToImpactAzi, gunToImpactDist, gunToTargetAzi, gunToTargetDist)
+    impliedWindDriftMeters = findDistanceGunToTarget(gunToImpactAzi, gunToImpactDist, gunToTargetAzi, gunToTargetDist)
+    return [impliedWindAzimuth, impliedWindDriftMeters]
+
+# print(findImpliedWindAziDist(323.2,5,0,4))
+
+# %%
+import pandas as pd
+
+# to be used when only spotting for 1 gun, if # of guns > 1, => use multipleGunSpotterArtillery() function
+def impliedSpotterArtillery(spotterToTargetAzimuth, spotterToTargetDistance, spotterToGunAzimuth, spotterToGunDistance):
+    firingHistoryArray = pd.DataFrame(columns=list(["spotterToTargetAzimuth", "spotterToTargetDistance", "spotterToGunAzimuth", "spotterToGunDistance", 
+        "impliedWindAzimuth", "impliedWindDriftMeters", "unadjustedGunToTargetAziDist", "windAdjustedGunToTargetAziDist"]))
+    print("Keep in mind multiple input responses should be space separated.")
+    
+    unadjustedGunToTargetAzimuth = findAzimuthGunToTarget(spotterToTargetAzimuth, spotterToTargetDistance, spotterToGunAzimuth, spotterToGunDistance)
+    unadjustedGunToTargetDistance = findDistanceGunToTarget(spotterToTargetAzimuth, spotterToTargetDistance, spotterToGunAzimuth, spotterToGunDistance)
+
+    
+    print("Enter space delimited impactAzimuth and impactDistance")
+    impactAziDist = input("\n").split()
+    impactAziDist = [float(x) for x in impactAziDist]
+    impliedWindAzimuth, impliedWindDriftMeters = findImpliedWindAziDist(impactAziDist[0], impactAziDist[1], unadjustedGunToTargetAzimuth, unadjustedGunToTargetDistance)
+
+    while True:
+        print(firingHistoryArray.tail(2))
+        userInput = input("Enter <S> to stop, <C> to change variables, or <W> to change impliedWindValues\n").lower() # potentially add another option to change values in dataframe if a mistake was entered
+
+
+        if userInput == "s":
+            print("Exiting..")
+            break
+
+        # changes inputs if inputs change, ask user if these are the correct inputs before applying
+        elif (userInput == "c"):
+            # display possible inputs
+            # changes inputs to what the other puts in
+            while True:
+                currentVariableValuesArray = [spotterToTargetAzimuth, spotterToTargetDistance, spotterToGunAzimuth, spotterToGunDistance]
+                print(f"\nEnter numbers 1 through 4 to change or Enter <N> to leave: \n spotterToTargetAzimuth(1), spotterToTargetDistance(2), spotterToGunAzimuth(3), spotterToGunDistance(4) \n {currentVariableValuesArray}")
+                variableNumbers = input()
+                if variableNumbers.lower() == "n":
+                    break
+                else:
+                    variableNumbers = variableNumbers.split()
+
+                # converts variables to int
+                variableNumbers = [int(x) for x in variableNumbers]
+
+                columnNames = firingHistoryArray.columns
+
+                # prints out variables that can be changed
+                print("\n")
+                for x in variableNumbers:
+                    print(f"{columnNames[x-1]}",end=" ")
+                print("\n These are the respective values to change.\nEnter the values to change.")
+
+                
+                variableValues = input().split()
+                variableValues = [float(x) for x in variableValues]
+
+                # assigns new values to existing array
+                for i in range(len(variableNumbers)):
+                    currentVariableValuesArray[variableNumbers[i]-1] = variableValues[i]
+
+                # assigns values in array to variables 
+                spotterToTargetAzimuth, spotterToTargetDistance, spotterToGunAzimuth, spotterToGunDistance = currentVariableValuesArray
+
+                # confirm these are the correct variables?
+                print(f"\nAre these the correct variables? Enter <Y> to leave. \n{currentVariableValuesArray}\n")
+                userInputToLeaveChange = input().lower()
+                if userInputToLeaveChange == "y":
+                    break
+                    
+        elif (userInput == "w"):
+            while True:
+                print("Enter space delimited impactAzimuth and impactDistance")
+                impactAziDist = input().split()
+                impactAziDist = [float(x) for x in impactAziDist]
+
+                print(f"\nAre these the correct impact variables? Enter <Y> to leave. \n{impactAziDist} \n")
+                userInputToLeaveChange = input().lower()
+                if userInputToLeaveChange == "y":
+                    impliedWindAzimuth, impliedWindDriftMeters = findImpliedWindAziDist(impactAziDist[0], impactAziDist[1], unadjustedGunToTargetAzimuth, unadjustedGunToTargetDistance)
+                    break
+                    
+        unadjustedGunToTargetAzimuth = findAzimuthGunToTarget(spotterToTargetAzimuth, spotterToTargetDistance, spotterToGunAzimuth, spotterToGunDistance)
+        unadjustedGunToTargetDistance = findDistanceGunToTarget(spotterToTargetAzimuth, spotterToTargetDistance, spotterToGunAzimuth, spotterToGunDistance)
+
+        
+        windAdjustedGunToTargetAziDist = findImpliedWindAdjustedGunToTargetAziDist(unadjustedGunToTargetAzimuth, unadjustedGunToTargetDistance, impliedWindAzimuth, impliedWindDriftMeters)
+        windAdjustedGunToTargetAziDist = [round(x, 3) for x in windAdjustedGunToTargetAziDist]
+                
+        print(f"\nWind Adjusted Gun To Target Azimuth: {windAdjustedGunToTargetAziDist[2]}")
+        print(f"Wind Adjusted Gun To Target Distance: {windAdjustedGunToTargetAziDist[3]} \n")
+        print("---------------------------------------------------------------------- \n")
+
+        valuesToStoreInDataframe = [spotterToTargetAzimuth, spotterToTargetDistance, spotterToGunAzimuth, spotterToGunDistance, impliedWindAzimuth, impliedWindDriftMeters, windAdjustedGunToTargetAziDist[0:2], windAdjustedGunToTargetAziDist[2:]]  
+        firingHistoryArrayLength = len(firingHistoryArray)
+        firingHistoryArray.reset_index(drop=True, inplace=True)
+        firingHistoryArray.loc[firingHistoryArrayLength] = valuesToStoreInDataframe
+        
+# impliedSpotterArtillery(209,92,320,50)
+
+# %%
+import pandas as pd
+
+def impliedNoSpotterArtillery(unadjustedGunToTargetAzimuth, unadjustedGunToTargetDistance):
+    firingHistoryArray = pd.DataFrame(columns=list(["unadjustedGunToTargetAzimuth", "unadjustedGunToTargetDistance", "impliedWindAzimuth", "impliedWindDriftMeters", "windAdjustedGunToTargetAziDist"]))
+    print("Keep in mind multiple input responses should be space separated.")
+    
+    print("Enter space delimited impactAzimuth and impactDistance")
+    impactAziDist = input("\n").split()
+    impactAziDist = [float(x) for x in impactAziDist]
+    impliedWindAzimuth, impliedWindDriftMeters = findImpliedWindAziDist(impactAziDist[0], impactAziDist[1], unadjustedGunToTargetAzimuth, unadjustedGunToTargetDistance)
+
+
+    while True:
+        print(firingHistoryArray.tail(2))
+        userInput = input("\nEnter <S> to stop, <T> to change target, or <W> to change impliedWindValues. \n").lower() # potentially add another option to change values in dataframe if a mistake was entered
+
+
+        if userInput == "s":
+            print("Exiting..")
+            break
+
+        # changes inputs if inputs change, ask user if these are the correct inputs before applying
+        elif (userInput == "t"):
+            # display possible inputs
+            # changes inputs to what the other puts in
+            while True:
+                print(f"\nEnter space delimited target values or Enter <N> to leave: \nCurrent Values:\nunadjustedGunToTargetAzimuth: {unadjustedGunToTargetAzimuth} \nunadjustedGunToTargetDistance: {unadjustedGunToTargetDistance} \n ")
+                variableValues = input("\n")
+                if variableValues.lower() == "n":
+                    break
+                else:
+                    variableValues = variableValues.split()
+
+                # converts inputs to float
+                variableValues = [float(x) for x in variableValues]
+
+
+                # assigns values in array to variables 
+                unadjustedGunToTargetAzimuth, unadjustedGunToTargetDistance = variableValues
+
+                # confirm these are the correct variables?
+                print(f"Are these the correct target variables? Enter <Y> to leave. \n{variableValues} \n")
+                userInputToLeaveChange = input().lower()
+                if userInputToLeaveChange == "y":
+                    break
+
+        elif (userInput == "w"):
+            while True:
+                print("Enter space delimited impactAzimuth and impactDistance")
+                impactAziDist = input().split()
+                impactAziDist = [float(x) for x in impactAziDist]
+
+                print(f"\nAre these the correct impact variables? Enter <Y> to leave. \n{impactAziDist} \n")
+                userInputToLeaveChange = input().lower()
+                if userInputToLeaveChange == "y":
+                    impliedWindAzimuth, impliedWindDriftMeters = findImpliedWindAziDist(impactAziDist[0], impactAziDist[1], unadjustedGunToTargetAzimuth, unadjustedGunToTargetDistance)
+                    break
+    
+
+        windAdjustedGunToTargetAziDist = findImpliedWindAdjustedGunToTargetAziDist(unadjustedGunToTargetAzimuth, unadjustedGunToTargetDistance, impliedWindAzimuth, impliedWindDriftMeters)
+        windAdjustedGunToTargetAziDist = [round(x, 3) for x in windAdjustedGunToTargetAziDist]
+        
+        print(f"Wind Adjusted Gun To Target Azimuth: {windAdjustedGunToTargetAziDist[2]}")
+        print(f"Wind Adjusted Gun To Target Distance: {windAdjustedGunToTargetAziDist[3]} \n")
+        print("---------------------------------------------------------------------- \n")
+
+        valuesToStoreInDataframe = [unadjustedGunToTargetAzimuth, unadjustedGunToTargetDistance, impliedWindAzimuth, impliedWindDriftMeters, windAdjustedGunToTargetAziDist[2:]]
+        valuesToStoreInDataframe = [round((x), 3) for x in valuesToStoreInDataframe[0:4]] + [valuesToStoreInDataframe[4]]
+        firingHistoryArrayLength = len(firingHistoryArray)
+        firingHistoryArray.reset_index(drop=True, inplace=True)
+        firingHistoryArray.loc[firingHistoryArrayLength] = valuesToStoreInDataframe
+
+# impliedNoSpotterArtillery(0,4)
+
+# %%
+import pandas as pd
+
+# to be used when only spotting for 1 gun, if # of guns > 1, => use multipleGunSpotterArtillery() function
+def impliedMultipleGunSpotterArtillery(spotterToTargetAzimuth, spotterToTargetDistance, spotterToGunsAziDist):
+    firingHistoryArray = pd.DataFrame(columns=list(["spotterToTargetAzimuth", "spotterToTargetDistance", "spotterToGunsAziDist", "impliedWindAzimuth",
+                                                    "impliedWindDriftMeters", "unadjustedGunToTargetAziDist", "windAdjustedGunToTargetAziDist"]))
+    print("Keep in mind multiple input responses should be space separated.")
+    
+    # first spotterToGunAziDist pair used to find impliedWindValues from impactValues, this gun must be the one firing to observe impacts
+    unadjustedGunToTargetAzimuth = findAzimuthGunToTarget(spotterToTargetAzimuth, spotterToTargetDistance, spotterToGunsAziDist[0], spotterToGunsAziDist[1])
+    unadjustedGunToTargetDistance = findDistanceGunToTarget(spotterToTargetAzimuth, spotterToTargetDistance, spotterToGunsAziDist[0], spotterToGunsAziDist[1])
+    
+    print("Enter space delimited impactAzimuth and impactDistance")
+    impactAziDist = input("\n").split()
+    impactAziDist = [float(x) for x in impactAziDist]
+    impliedWindAzimuth, impliedWindDriftMeters = findImpliedWindAziDist(impactAziDist[0], impactAziDist[1], unadjustedGunToTargetAzimuth, unadjustedGunToTargetDistance)    
+    
+    while True:
+        print(firingHistoryArray.tail(2))
+        userInput = input("Enter <S> to stop, <C> to change variables, or <W> to change impliedWindValues\n").lower() # potentially add another option to change values in dataframe if a mistake was entered
+
+
+        if userInput == "s":
+            print("Exiting..")
+            break
+
+        # changes inputs if inputs change, ask user if these are the correct inputs before applying
+        elif (userInput == "c"):
+            # display possible inputs
+            # changes inputs to what the other puts in
+            while True:
+                currentVariableValuesArray = [spotterToTargetAzimuth, spotterToTargetDistance, spotterToGunsAziDist]
+                print(f"\nEnter numbers 1 through 4 to change or Enter <N> to leave: \n spotterToTargetAzimuth(1), spotterToTargetDistance(2), spotterToGunAzimuth(3), spotterToGunDistance(4) \n {currentVariableValuesArray}")
+                variableNumbers = input()
+                if variableNumbers.lower() == "n":
+                    break
+                else:
+                    variableNumbers = variableNumbers.split()
+
+                # converts variables to int
+                variableNumbers = [int(x) for x in variableNumbers]
+
+                columnNames = firingHistoryArray.columns
+
+                # prints out variables that can be changed
+                print("\n")
+                for x in variableNumbers:
+                    print(f"{columnNames[x-1]}",end=" ")
+                print("\n These are the respective values to change.\nEnter the values to change.")
+
+                
+                variableValues = input().split()
+                for i in range(len(variableValues)):
+                    if variableNumbers[i] == 3:
+                        line = variableValues[i].replace("[", "")
+                        line = line.replace("]", "")
+                        line = line.split(",")
+                        variableValues[i] = [float(x) for x in line]
+                    else:
+                        variableValues[i] = float(variableValues[i])
+
+                        
+                # assigns new values to existing array
+                for i in range(len(variableNumbers)):
+                    currentVariableValuesArray[variableNumbers[i]-1] = variableValues[i]
+
+                # assigns values in array to variables 
+                spotterToTargetAzimuth, spotterToTargetDistance, spotterToGunsAziDist = currentVariableValuesArray
+
+                # confirm these are the correct variables?
+                print(f"\nAre these the correct variables? Enter <Y> to leave. \n{currentVariableValuesArray}\n")
+                userInputToLeaveChange = input().lower()
+                if userInputToLeaveChange == "y":
+                    break
+                    
+        elif (userInput == "w"):
+            while True:
+                print("Enter space delimited impactAzimuth and impactDistance")
+                impactAziDist = input().split()
+                impactAziDist = [float(x) for x in impactAziDist]
+
+                print(f"\nAre these the correct impact variables? Enter <Y> to leave. \n{impactAziDist} \n")
+                userInputToLeaveChange = input().lower()
+                if userInputToLeaveChange == "y":
+                    unadjustedGunToTargetAzimuth = findAzimuthGunToTarget(spotterToTargetAzimuth, spotterToTargetDistance, spotterToGunsAziDist[0], spotterToGunsAziDist[1])
+                    unadjustedGunToTargetDistance = findDistanceGunToTarget(spotterToTargetAzimuth, spotterToTargetDistance, spotterToGunsAziDist[0], spotterToGunsAziDist[1])
+                    impliedWindAzimuth, impliedWindDriftMeters = findImpliedWindAziDist(impactAziDist[0], impactAziDist[1], unadjustedGunToTargetAzimuth, unadjustedGunToTargetDistance)
+                    break
+          
+        unadjustedGunToTargetAziDist = []
+        adjustedGunToTargetAziDist = []
+        
+        for i in range(int(len(spotterToGunsAziDist) / 2)):
+            unadjustedGunToTargetAzimuth = findAzimuthGunToTarget(spotterToTargetAzimuth, spotterToTargetDistance, spotterToGunsAziDist[i*2], spotterToGunsAziDist[i*2+1])
+            unadjustedGunToTargetDistance = findDistanceGunToTarget(spotterToTargetAzimuth, spotterToTargetDistance, spotterToGunsAziDist[i*2], spotterToGunsAziDist[i*2+1])
+            
+            windAdjustedGunToTargetAziDist = findImpliedWindAdjustedGunToTargetAziDist(unadjustedGunToTargetAzimuth, unadjustedGunToTargetDistance, impliedWindAzimuth, impliedWindDriftMeters)
+            windAdjustedGunToTargetAziDist = [round(x, 3) for x in windAdjustedGunToTargetAziDist]
+                
+            unadjustedGunToTargetAziDist.append(windAdjustedGunToTargetAziDist[0:2])
+            adjustedGunToTargetAziDist.append(windAdjustedGunToTargetAziDist[2:])
+                
+            print(f"\nWind Adjusted Gun To Target Azimuth: {windAdjustedGunToTargetAziDist[2]}")
+            print(f"Wind Adjusted Gun To Target Distance: {windAdjustedGunToTargetAziDist[3]} \n")
+            
+        print("---------------------------------------------------------------------- \n")
+
+        valuesToStoreInDataframe = [spotterToTargetAzimuth, spotterToTargetDistance, spotterToGunsAziDist, impliedWindAzimuth, impliedWindDriftMeters, unadjustedGunToTargetAziDist, adjustedGunToTargetAziDist]  
+        firingHistoryArrayLength = len(firingHistoryArray)
+        firingHistoryArray.reset_index(drop=True, inplace=True)
+        firingHistoryArray.loc[firingHistoryArrayLength] = valuesToStoreInDataframe
+        
+impliedMultipleGunSpotterArtillery(254,65,[173,50,250,50])
+
+# %%
 
 
 
