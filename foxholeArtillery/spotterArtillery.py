@@ -797,7 +797,7 @@ def impliedMultipleGunSpotterArtillery(spotterToTargetAzimuth, spotterToTargetDi
         firingHistoryArray.reset_index(drop=True, inplace=True)
         firingHistoryArray.loc[firingHistoryArrayLength] = valuesToStoreInDataframe
         
-impliedMultipleGunSpotterArtillery(254,65,[173,50,250,50])
+# impliedMultipleGunSpotterArtillery(254,65,[173,50,250,50])
 
 # %%
 
