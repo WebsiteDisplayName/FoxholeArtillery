@@ -713,8 +713,8 @@ def impliedMultipleGunSpotterArtillery(spotterToTargetAzimuth, spotterToTargetDi
     gunToImpactAzimuth = findAzimuthGunToTarget(impactAziDist[0], impactAziDist[1], spotterToGunsAziDist[0], spotterToGunsAziDist[1])
     gunToImpactDistance = findDistanceGunToTarget(impactAziDist[0], impactAziDist[1], spotterToGunsAziDist[0], spotterToGunsAziDist[1])
 
-    
     impliedWindAzimuth, impliedWindDriftMeters = findImpliedWindAziDist(gunToImpactAzimuth, gunToImpactDistance, unadjustedGunToTargetAzimuth, unadjustedGunToTargetDistance)    
+
     
     while True:
         print(firingHistoryArray.tail(2))
@@ -787,7 +787,12 @@ def impliedMultipleGunSpotterArtillery(spotterToTargetAzimuth, spotterToTargetDi
           
         unadjustedGunToTargetAzimuth = findAzimuthGunToTarget(spotterToTargetAzimuth, spotterToTargetDistance, spotterToGunsAziDist[0], spotterToGunsAziDist[1])
         unadjustedGunToTargetDistance = findDistanceGunToTarget(spotterToTargetAzimuth, spotterToTargetDistance, spotterToGunsAziDist[0], spotterToGunsAziDist[1])
-        impliedWindAzimuth, impliedWindDriftMeters = findImpliedWindAziDist(impactAziDist[0], impactAziDist[1], unadjustedGunToTargetAzimuth, unadjustedGunToTargetDistance)
+
+        gunToImpactAzimuth = findAzimuthGunToTarget(impactAziDist[0], impactAziDist[1], spotterToGunsAziDist[0], spotterToGunsAziDist[1])
+        gunToImpactDistance = findDistanceGunToTarget(impactAziDist[0], impactAziDist[1], spotterToGunsAziDist[0], spotterToGunsAziDist[1])
+
+        impliedWindAzimuth, impliedWindDriftMeters = findImpliedWindAziDist(gunToImpactAzimuth, gunToImpactDistance, unadjustedGunToTargetAzimuth, unadjustedGunToTargetDistance)
+
 
         unadjustedGunToTargetAziDist = []
         adjustedGunToTargetAziDist = []
