@@ -520,14 +520,18 @@ def impliedSpotterArtillery(spotterToTargetAzimuth, spotterToTargetDistance, spo
         "impliedWindAzimuth", "impliedWindDriftMeters", "unadjustedGunToTargetAziDist", "windAdjustedGunToTargetAziDist"]))
     print("Keep in mind multiple input responses should be space separated.")
     
-    unadjustedGunToTargetAzimuth = findAzimuthGunToTarget(spotterToTargetAzimuth, spotterToTargetDistance, spotterToGunAzimuth, spotterToGunDistance)
-    unadjustedGunToTargetDistance = findDistanceGunToTarget(spotterToTargetAzimuth, spotterToTargetDistance, spotterToGunAzimuth, spotterToGunDistance)
-
     
     print("Enter space delimited impactAzimuth and impactDistance")
     impactAziDist = input("\n").split()
     impactAziDist = [float(x) for x in impactAziDist]
-    impliedWindAzimuth, impliedWindDriftMeters = findImpliedWindAziDist(impactAziDist[0], impactAziDist[1], unadjustedGunToTargetAzimuth, unadjustedGunToTargetDistance)
+
+    unadjustedGunToTargetAzimuth = findAzimuthGunToTarget(spotterToTargetAzimuth, spotterToTargetDistance, spotterToGunAzimuth, spotterToGunDistance)
+    unadjustedGunToTargetDistance = findDistanceGunToTarget(spotterToTargetAzimuth, spotterToTargetDistance, spotterToGunAzimuth, spotterToGunDistance)
+
+    gunToImpactAzimuth = findAzimuthGunToTarget(impactAziDist[0], impactAziDist[1], spotterToGunAzimuth, spotterToGunDistance)
+    gunToImpactDistance = findDistanceGunToTarget(impactAziDist[0], impactAziDist[1], spotterToGunAzimuth, spotterToGunDistance)
+
+    impliedWindAzimuth, impliedWindDriftMeters = findImpliedWindAziDist(gunToImpactAzimuth, gunToImpactDistance, unadjustedGunToTargetAzimuth, unadjustedGunToTargetDistance)
 
     while True:
         print(firingHistoryArray.tail(2))
@@ -588,12 +592,15 @@ def impliedSpotterArtillery(spotterToTargetAzimuth, spotterToTargetDistance, spo
                 print(f"\nAre these the correct impact variables? Enter <Y> to leave. \n{impactAziDist} \n")
                 userInputToLeaveChange = input().lower()
                 if userInputToLeaveChange == "y":
-                    impliedWindAzimuth, impliedWindDriftMeters = findImpliedWindAziDist(impactAziDist[0], impactAziDist[1], unadjustedGunToTargetAzimuth, unadjustedGunToTargetDistance)
                     break
                     
         unadjustedGunToTargetAzimuth = findAzimuthGunToTarget(spotterToTargetAzimuth, spotterToTargetDistance, spotterToGunAzimuth, spotterToGunDistance)
         unadjustedGunToTargetDistance = findDistanceGunToTarget(spotterToTargetAzimuth, spotterToTargetDistance, spotterToGunAzimuth, spotterToGunDistance)
 
+        gunToImpactAzimuth = findAzimuthGunToTarget(impactAziDist[0], impactAziDist[1], spotterToGunAzimuth, spotterToGunDistance)
+        gunToImpactDistance = findDistanceGunToTarget(impactAziDist[0], impactAziDist[1], spotterToGunAzimuth, spotterToGunDistance)
+
+        impliedWindAzimuth, impliedWindDriftMeters = findImpliedWindAziDist(gunToImpactAzimuth, gunToImpactDistance, unadjustedGunToTargetAzimuth, unadjustedGunToTargetDistance)
         
         windAdjustedGunToTargetAziDist = findImpliedWindAdjustedGunToTargetAziDist(unadjustedGunToTargetAzimuth, unadjustedGunToTargetDistance, impliedWindAzimuth, impliedWindDriftMeters)
         windAdjustedGunToTargetAziDist = [round(x, 3) for x in windAdjustedGunToTargetAziDist]
@@ -694,13 +701,20 @@ def impliedMultipleGunSpotterArtillery(spotterToTargetAzimuth, spotterToTargetDi
     print("Keep in mind multiple input responses should be space separated.")
     
     # first spotterToGunAziDist pair used to find impliedWindValues from impactValues, this gun must be the one firing to observe impacts
-    unadjustedGunToTargetAzimuth = findAzimuthGunToTarget(spotterToTargetAzimuth, spotterToTargetDistance, spotterToGunsAziDist[0], spotterToGunsAziDist[1])
-    unadjustedGunToTargetDistance = findDistanceGunToTarget(spotterToTargetAzimuth, spotterToTargetDistance, spotterToGunsAziDist[0], spotterToGunsAziDist[1])
+
     
     print("Enter space delimited impactAzimuth and impactDistance")
     impactAziDist = input("\n").split()
     impactAziDist = [float(x) for x in impactAziDist]
-    impliedWindAzimuth, impliedWindDriftMeters = findImpliedWindAziDist(impactAziDist[0], impactAziDist[1], unadjustedGunToTargetAzimuth, unadjustedGunToTargetDistance)    
+
+    unadjustedGunToTargetAzimuth = findAzimuthGunToTarget(spotterToTargetAzimuth, spotterToTargetDistance, spotterToGunsAziDist[0], spotterToGunsAziDist[1])
+    unadjustedGunToTargetDistance = findDistanceGunToTarget(spotterToTargetAzimuth, spotterToTargetDistance, spotterToGunsAziDist[0], spotterToGunsAziDist[1])
+
+    gunToImpactAzimuth = findAzimuthGunToTarget(impactAziDist[0], impactAziDist[1], spotterToGunsAziDist[0], spotterToGunsAziDist[1])
+    gunToImpactDistance = findDistanceGunToTarget(impactAziDist[0], impactAziDist[1], spotterToGunsAziDist[0], spotterToGunsAziDist[1])
+
+    
+    impliedWindAzimuth, impliedWindDriftMeters = findImpliedWindAziDist(gunToImpactAzimuth, gunToImpactDistance, unadjustedGunToTargetAzimuth, unadjustedGunToTargetDistance)    
     
     while True:
         print(firingHistoryArray.tail(2))
@@ -769,11 +783,12 @@ def impliedMultipleGunSpotterArtillery(spotterToTargetAzimuth, spotterToTargetDi
                 print(f"\nAre these the correct impact variables? Enter <Y> to leave. \n{impactAziDist} \n")
                 userInputToLeaveChange = input().lower()
                 if userInputToLeaveChange == "y":
-                    unadjustedGunToTargetAzimuth = findAzimuthGunToTarget(spotterToTargetAzimuth, spotterToTargetDistance, spotterToGunsAziDist[0], spotterToGunsAziDist[1])
-                    unadjustedGunToTargetDistance = findDistanceGunToTarget(spotterToTargetAzimuth, spotterToTargetDistance, spotterToGunsAziDist[0], spotterToGunsAziDist[1])
-                    impliedWindAzimuth, impliedWindDriftMeters = findImpliedWindAziDist(impactAziDist[0], impactAziDist[1], unadjustedGunToTargetAzimuth, unadjustedGunToTargetDistance)
                     break
           
+        unadjustedGunToTargetAzimuth = findAzimuthGunToTarget(spotterToTargetAzimuth, spotterToTargetDistance, spotterToGunsAziDist[0], spotterToGunsAziDist[1])
+        unadjustedGunToTargetDistance = findDistanceGunToTarget(spotterToTargetAzimuth, spotterToTargetDistance, spotterToGunsAziDist[0], spotterToGunsAziDist[1])
+        impliedWindAzimuth, impliedWindDriftMeters = findImpliedWindAziDist(impactAziDist[0], impactAziDist[1], unadjustedGunToTargetAzimuth, unadjustedGunToTargetDistance)
+
         unadjustedGunToTargetAziDist = []
         adjustedGunToTargetAziDist = []
         
