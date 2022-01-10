@@ -629,6 +629,13 @@ def impliedNoSpotterArtillery(unadjustedGunToTargetAzimuth, unadjustedGunToTarge
     impliedWindAzimuth, impliedWindDriftMeters = findImpliedWindAziDist(impactAziDist[0], impactAziDist[1], unadjustedGunToTargetAzimuth, unadjustedGunToTargetDistance)
 
 
+    windAdjustedGunToTargetAziDist = findImpliedWindAdjustedGunToTargetAziDist(unadjustedGunToTargetAzimuth, unadjustedGunToTargetDistance, impliedWindAzimuth, impliedWindDriftMeters)
+    windAdjustedGunToTargetAziDist = [round(x, 3) for x in windAdjustedGunToTargetAziDist]
+
+    print(f"Wind Adjusted Gun To Target Azimuth: {windAdjustedGunToTargetAziDist[2]}")
+    print(f"Wind Adjusted Gun To Target Distance: {windAdjustedGunToTargetAziDist[3]} \n")
+    print("---------------------------------------------------------------------- \n")
+
     while True:
         print(firingHistoryArray.tail(2))
         userInput = input("\nEnter <S> to stop, <T> to change target, or <W> to change impliedWindValues. \n").lower() # potentially add another option to change values in dataframe if a mistake was entered
