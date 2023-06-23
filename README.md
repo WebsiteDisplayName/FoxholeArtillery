@@ -1,5 +1,6 @@
-# foxholeArtillery
+# NOTE: THIS REPO IS DEPRECATED, NEW VERSION AT [Foxhole Artillery Refactor](https://github.com/WebsiteDisplayName/foxholeArtilleryRefactor)
 
+# foxholeArtillery
 
 ## How to use
 
